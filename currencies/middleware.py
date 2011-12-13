@@ -3,10 +3,13 @@ import os
 import pygeoip
 
 from django.conf import settings
-
 from .models import Country
 
 
+# NOTE: I am using pygeoip instead of the geodjango geoip interface
+# simple because my os provided GeoIP.dat file is not compatible with
+# geodjango's api. It would be nice if it fellback to geojango's api
+# if pygeoip is not installed.
 geoip = pygeoip.GeoIP(os.path.join(settings.GEOIP_PATH, "GeoIP.dat"))
 
 

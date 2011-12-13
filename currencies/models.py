@@ -9,6 +9,10 @@ from polymorphic.polymorphic_model import PolymorphicModel
 
 
 class Currency(models.Model):
+    """
+    A currency model.
+    """
+
     code = models.CharField(_(u'Code'), unique=True, max_length=3)
     rate = models.DecimalField(_(u'Rate'), max_digits=12, decimal_places=4,
         default=Decimal('1'))
@@ -41,6 +45,10 @@ class Currency(models.Model):
 
 
 class Country(models.Model):
+    """
+    A country model to map country code to a currency.
+    """
+
     code = models.CharField(_(u'Code'), unique=True, max_length=2)
     currency = models.ForeignKey(Currency)
 

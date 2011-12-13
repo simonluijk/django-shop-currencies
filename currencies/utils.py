@@ -4,6 +4,10 @@ from django.conf import settings
 
 
 def get_currency(request):
+    """
+    Get currency from request. If no currency return SHOP_DEFAULT_CURRENCY
+    """
+
     try:
         return request.session['CURRENCY']
     except KeyError:
@@ -18,8 +22,8 @@ def currency_fmt(value, places=2, sep=',', dp='.'):
     sep:     optional grouping separator (comma, period, space, or blank)
     dp:      decimal point indicator (comma or period)
              only specify as blank when places is zero
-
     """
+
     q = Decimal(10) ** - places  # 2 places --> '0.01'
     sign, digits, exp = value.quantize(q).as_tuple()
     result = []
