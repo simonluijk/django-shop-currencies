@@ -19,9 +19,9 @@ class Currency(models.Model):
     spread = models.DecimalField(_(u'Spread'), max_digits=12, decimal_places=4,
         default=Decimal('2.5'))
     before = models.CharField(_(u'Before chars'), max_length=30, blank=True,
-        null=True)
+        default='')
     after = models.CharField(_(u'After chars'), max_length=30, blank=True,
-        null=True)
+        default='')
     decimal_places = models.IntegerField(_(u'Decimal places'), default=2)
     separator = models.CharField(_(u'Thousand seperator'), max_length=1,
         default=u',')
