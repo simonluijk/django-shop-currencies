@@ -32,7 +32,7 @@ def change_currency(request):
     return http.HttpResponseRedirect(next)
 
 
-class CurrenciesViewMixin(object):
+class CurrenciesCartDetailsMixin(object):
     """
     Mixin providing currency support.
     """
@@ -56,5 +56,5 @@ class CurrenciesViewMixin(object):
         return ctx
 
 
-class CurrenciesCartDetails(CurrenciesViewMixin, CartDetails):
+class CurrenciesCartDetails(CurrenciesCartDetailsMixin, CartDetails):
     pass
