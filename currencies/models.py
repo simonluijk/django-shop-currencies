@@ -62,3 +62,29 @@ class Country(models.Model):
     def save(self, *args, **kwargs):
         self.code = self.code.upper()
         super(Country, self).save(*args, **kwargs)
+
+
+class CurrenciesMixin(object):
+    """
+    A mixin to add multi currency support to your models.
+    """
+
+    def get_price(self, currency=None):
+        """
+        Returns the price in the provided currency.
+
+        There is a template filter to provide the current currency.
+        You can use it like this:
+
+        {% load currencies %}
+        {% price product %}
+        {% price product "USD" %}
+        {% price cartitem %}
+        ...
+        """
+        # NOTE: I have not implemented this method yet as I am using a custom
+        # implementation because my prices are not attached to the product.
+        # An implemention like chrisglass has done here would make sence.
+        # http://bit.ly/tNpESg
+        # Ofcourse you would use the Currency model above.
+        return super(CurrenciesMixin, self).get_price()
