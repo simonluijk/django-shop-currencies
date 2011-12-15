@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from django import template
+from shop.models_bases import BaseCart, BaseCartItem, BaseOrder, BaseOrderItem
 from ..models import Currency
 from ..utils import currency_fmt, get_currency
 
@@ -7,27 +8,53 @@ from ..utils import currency_fmt, get_currency
 register = template.Library()
 
 
+def get_price(context, obj, attr, currency=None):
+    """
+    Helper function to get price
+    """
+
+    if isinstance(obj, tuple([BaseOrder, BaseCart])):
+        currency = obj.currency
+    elif isinstance(obj, BaseCartItem):
+        currency = obj.cart.currency
+    elif isinstance(obj, BaseOrderItem):
+        currency = obj.order.currency
+    elif currency is None:
+        currency = get_currency(context['request'])
+
+    if not attr:
+        price = obj.get_price_in_currency(currency)
+    else:
+        price = getattr(obj, attr)
+
+    currency = Currency.objects.get(code=currency)
+    price = currency_fmt(price, currency.decimal_places, currency.separator,
+        currency.decimal_point)
+    return [price, currency]
+
+
 @register.simple_tag(takes_context=True)
-def price(context, obj, currency=None):
+def price(context, obj, attr=None, currency=None):
     """
     Template tag that takes a object and returns its price formatted in a
     currency. If currency is not passed it is taken from the request.
     """
 
-    if currency is None:
-        try:
-            currency = get_currency(context['request'])
-        except KeyError:
-            return u''
-
     try:
-        currency = Currency.objects.get(code=currency)
-    except Currency.DoesNotExist:
+        price, currency = get_price(context, obj, attr, currency)
+        return u' '.join([currency.before, price, currency.after])
+    except (KeyError, AttributeError, Currency.DoesNotExist), e:
         return u''
 
-    price = obj.get_price(currency)
-    price = currency_fmt(price, currency.decimal_places, currency.separator,
-        currency.decimal_point)
 
-    return u'%s %s %s' % (
-        currency.before, price, currency.after)
+@register.simple_tag(takes_context=True)
+def price_nofmt(context, obj, attr=None, currency=None):
+    """
+    Same as above but does not append/prepend currency symbols
+    """
+
+    try:
+        price, currency = get_price(context, obj, attr, currency)
+        return price
+    except (KeyError, AttributeError, Currency.DoesNotExist), e:
+        return u''
