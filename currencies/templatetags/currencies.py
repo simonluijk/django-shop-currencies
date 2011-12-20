@@ -26,6 +26,8 @@ def get_price(context, obj, attr, currency=None):
         price = obj.get_price_in_currency(currency)
     else:
         price = getattr(obj, attr)
+        if callable(price):
+            price = price()
 
     currency = Currency.objects.get(code=currency)
     price = currency_fmt(price, currency.decimal_places, currency.separator,
