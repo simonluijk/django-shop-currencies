@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ImproperlyConfigured
 from polymorphic.polymorphic_model import PolymorphicModel
+from shop.models_bases import BaseCartItem
 
 
 class Currency(models.Model):
@@ -87,3 +88,27 @@ class CurrenciesProductMixin(object):
         # http://bit.ly/tNpESg
         # Ofcourse you would use the Currency model above.
         return super(CurrenciesProductMixin, self).get_price()
+
+
+class CurrenciesCartItemMixin(object):
+    """
+    A mixin to add currency support to your cart item models.
+    """
+
+    def get_price(self):
+        """
+        Override CartItem get_price method to return price bassed on
+        self.cart.currency which is set by "currencies.cart_modifiers.CurrenciesModifier"
+        so make sure you have put it in SHOP_CART_MODIFIERS setting.
+        """
+        # NOTE: Should rase a ImproperlyConfigured if currency is not set
+        return self.product.get_price_in_currency(self.cart.currency)
+
+
+class CurrenciesCartItem(CurrenciesCartItemMixin, BaseCartItem):
+    class Meta(object):
+        abstract = False
+        app_label = 'shop'
+        db_table = 'shop_cartitem'
+        verbose_name = _('Cart')
+        verbose_name_plural = _('Carts')
