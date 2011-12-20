@@ -64,12 +64,12 @@ class Country(models.Model):
         super(Country, self).save(*args, **kwargs)
 
 
-class CurrenciesMixin(object):
+class CurrenciesProductMixin(object):
     """
-    A mixin to add multi currency support to your models.
+    A mixin to add multi currency support to your product models.
     """
 
-    def get_price(self, currency=None):
+    def get_price_in_currency(self, currency=None):
         """
         Returns the price in the provided currency.
 
@@ -79,7 +79,6 @@ class CurrenciesMixin(object):
         {% load currencies %}
         {% price product %}
         {% price product "USD" %}
-        {% price cartitem %}
         ...
         """
         # NOTE: I have not implemented this method yet as I am using a custom
@@ -87,4 +86,4 @@ class CurrenciesMixin(object):
         # An implemention like chrisglass has done here would make sence.
         # http://bit.ly/tNpESg
         # Ofcourse you would use the Currency model above.
-        return super(CurrenciesMixin, self).get_price()
+        return super(CurrenciesProductMixin, self).get_price()
