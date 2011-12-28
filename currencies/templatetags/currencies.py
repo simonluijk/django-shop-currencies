@@ -44,7 +44,7 @@ def price(context, obj, attr=None, currency=None):
 
     try:
         price, currency = get_price(context, obj, attr, currency)
-        return u' '.join([currency.before, price, currency.after])
+        return u' '.join([currency.before, price, currency.after]).strip()
     except (KeyError, AttributeError, Currency.DoesNotExist), e:
         return u''
 
