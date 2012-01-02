@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ImproperlyConfigured
 from polymorphic.polymorphic_model import PolymorphicModel
-from shop.models_bases import BaseCartItem
+from shop.models_bases import BaseCartItem, BaseOrder
+from shop.models_bases.managers import OrderManager
 
 
 class Currency(models.Model):
@@ -112,3 +113,21 @@ class CurrenciesCartItem(CurrenciesCartItemMixin, BaseCartItem):
         db_table = 'shop_cartitem'
         verbose_name = _('Cart')
         verbose_name_plural = _('Carts')
+
+
+class CurrenciesOrderManager(OrderManager):
+    def create_from_cart(self, cart):
+        o = super(CurrenciesOrderManager, self).create_from_cart(cart)
+        o.currency = cart.currency
+        o.save()
+        return o
+
+
+class CurrenciesBaseOrder(BaseOrder):
+    currency = models.CharField(_(u'Currency'), max_length=3)
+
+    class Meta(object):
+        abstract = True
+        app_label = 'shop'
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
