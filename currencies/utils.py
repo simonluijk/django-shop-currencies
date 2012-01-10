@@ -1,6 +1,10 @@
 #-*- coding:utf-8 -*-
 from decimal import Decimal
 from django.conf import settings
+from django import template
+from shop.models_bases import BaseCart, BaseCartItem, BaseOrder, BaseOrderItem
+from shop.models import ExtraOrderPriceField
+from .models import Currency
 
 
 def get_currency(request):
@@ -12,6 +16,57 @@ def get_currency(request):
         return request.session['CURRENCY']
     except KeyError:
         return settings.SHOP_DEFAULT_CURRENCY
+
+
+def get_price(obj, attr, currency=None):
+    """
+    Helper function to get price
+    """
+
+    if isinstance(obj, tuple([BaseOrder, BaseCart])):
+        currency = obj.currency
+    elif isinstance(obj, BaseCartItem):
+        currency = obj.cart.currency
+    elif isinstance(obj, BaseOrderItem):
+        currency = obj.order.currency
+    elif isinstance(obj, ExtraOrderPriceField):
+        currency = obj.order.currency
+        attr = 'value'
+
+    if not attr:
+        price = obj.get_price_in_currency(currency)
+    else:
+        price = getattr(obj, attr)
+        if callable(price):
+            price = price()
+
+    currency = Currency.objects.get(code=currency)
+    price = currency_fmt(price, currency.decimal_places, currency.separator,
+        currency.decimal_point)
+    return [price, currency]
+
+
+def format_price(obj, attr=None, currency=None):
+    """
+    Function that takes a object and returns its price formatted in a
+    currency.
+    """
+    try:
+        price, currency = get_price(obj, attr, currency)
+        return u' '.join([currency.before, price, currency.after]).strip()
+    except (KeyError, AttributeError, Currency.DoesNotExist), e:
+        return u''
+
+
+def format_price_nosym(obj, attr=None, currency=None):
+    """
+    Same as above but does not append/prepend currency symbols
+    """
+    try:
+        price, currency = get_price(obj, attr, currency)
+        return price
+    except (KeyError, AttributeError, Currency.DoesNotExist), e:
+        return u''
 
 
 def currency_fmt(value, places=2, sep=',', dp='.'):
