@@ -25,10 +25,13 @@ def get_price(obj, attr, currency=None):
 
     if isinstance(obj, tuple([BaseOrder, BaseCart])):
         currency = obj.currency
+
     elif isinstance(obj, BaseCartItem):
         currency = obj.cart.currency
+
     elif isinstance(obj, BaseOrderItem):
         currency = obj.order.currency
+
     elif isinstance(obj, ExtraOrderPriceField):
         currency = obj.order.currency
         attr = 'value'
