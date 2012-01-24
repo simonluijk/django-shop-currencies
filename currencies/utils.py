@@ -104,4 +104,6 @@ def currency_fmt(value, places=2, sep=',', dp='.'):
         if i == 3 and digits:
             i = 0
             build(sep)
+    if sign == 1:
+        build(str('-'))
     return ''.join(reversed(result))
