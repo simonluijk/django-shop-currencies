@@ -22,6 +22,7 @@ def get_price(obj, attr, currency=None):
     """
     Helper function to get price
     """
+    price = None
 
     if isinstance(obj, tuple([BaseOrder, BaseCart])):
         currency = obj.currency
@@ -36,12 +37,16 @@ def get_price(obj, attr, currency=None):
         currency = obj.order.currency
         attr = 'value'
 
-    if not attr:
-        price = obj.get_price_in_currency(currency)
-    else:
-        price = getattr(obj, attr)
-        if callable(price):
-            price = price()
+    elif isinstance(obj, Decimal) and currency:
+        price = obj
+
+    if not price:
+        if not attr:
+            price = obj.get_price_in_currency(currency)
+        else:
+            price = getattr(obj, attr)
+            if callable(price):
+                price = price()
 
     currency = Currency.objects.get(code=currency)
     price = currency_fmt(price, currency.decimal_places, currency.separator,
