@@ -49,6 +49,10 @@ class Currency(models.Model):
         rate = 1 / self.get_rate()
         return Decimal(rate).quantize(Decimal('0.0001'))
 
+    def round(self, amount):
+        q = Decimal(10) ** - self.decimal_places
+        return amount.quantize(q)
+
 
 class Country(models.Model):
     """
