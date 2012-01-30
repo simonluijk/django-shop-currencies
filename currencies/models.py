@@ -45,6 +45,10 @@ class Currency(models.Model):
         rate = self.rate * (1 + (self.spread / 100))
         return Decimal(rate).quantize(Decimal('0.0001'))
 
+    def get_inverse_rate(self):
+        rate = 1 / self.get_rate()
+        return Decimal(rate).quantize(Decimal('0.0001'))
+
 
 class Country(models.Model):
     """
