@@ -1,0 +1,7 @@
+Django
+south
+django_nose
+
+django_polymorphic
+-e git+git@github.com:simonluijk/django-shop.git@9b76c2904ff#egg=shop
+pygeoip
