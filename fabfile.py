@@ -42,7 +42,7 @@ def syncdb():
 
 def schema():
     """Create a schema migration for any changes."""
-    _local('django-admin.py schemamigration waffle --auto')
+    _local('django-admin.py schemamigration currencies --auto')
 
 
 def migrate():
