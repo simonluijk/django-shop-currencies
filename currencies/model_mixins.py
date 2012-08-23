@@ -15,12 +15,14 @@ class CurrenciesProductMixin(object):
         {% price product "USD" %}
         ...
         """
-        # NOTE: I have not implemented this method yet as I am using a custom
-        # implementation because my prices are not attached to the product.
-        # An implemention like chrisglass has done here would make sence.
-        # http://bit.ly/tNpESg
-        # Ofcourse you would use the Currency model above.
-        return super(CurrenciesProductMixin, self).get_price()
+        # NOTE: Avoid curcular import
+        from .models import Currency
+
+        if currency is None:
+            currency = setting.SHOP_DEFAULT_CURRENCY
+
+        currency = Currency.objects.get(code=currency)
+        return self.price_set.get(currency=currency).price
 
 
 class CurrenciesCartItemMixin(object):

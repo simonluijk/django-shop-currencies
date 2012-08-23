@@ -8,6 +8,7 @@ from django.core.exceptions import ImproperlyConfigured
 from polymorphic.polymorphic_model import PolymorphicModel
 from shop.models_bases import BaseCartItem, BaseOrder
 from shop.models_bases.managers import OrderManager
+from shop.util.loader import get_model_string
 
 from .model_mixins import CurrenciesCartItemMixin
 
@@ -101,3 +102,17 @@ class CurrenciesBaseOrder(BaseOrder):
         app_label = 'shop'
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
+
+
+class Price(models.Model):
+    """
+    A product price
+    """
+
+    product = models.ForeignKey(get_model_string('Product'))
+    currency = models.ForeignKey(Currency)
+    price = models.DecimalField(max_digits=12, decimal_places=4)
+
+    def __unicode__(self):
+        price = self.currency.format(self.price)
+        return u' '.join([self.currency.before, price, self.currency.after]).strip()

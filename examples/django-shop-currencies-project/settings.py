@@ -50,5 +50,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
+SHOP_PRODUCT_MODEL = (u'test_app.models.Product', 'shop')
 SHOP_CARTITEM_MODEL = (u'currencies.models.CurrenciesCartItem', 'shop')
 SHOP_DEFAULT_CURRENCY = u'EUR'
