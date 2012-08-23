@@ -8,4 +8,5 @@ env:
 install:
     - pip install -q Django==$DJANGO_VERSION --use-mirrors
     - pip install -q -r travis.txt --use-mirrors
+    - pip install Fabric==1.4.3 --use-mirrors
 script: fab test
