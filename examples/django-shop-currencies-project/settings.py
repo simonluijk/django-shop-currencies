@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_nose',
     'south',
+    'test_app',
     'currencies',
     'shop',
 )
@@ -37,6 +38,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'currencies.middleware.GeoIP2CountryMiddleware',
     'currencies.middleware.Country2CurrencyMiddleware',
 )
