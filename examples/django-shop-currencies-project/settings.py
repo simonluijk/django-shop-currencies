@@ -50,6 +50,8 @@ STATIC_URL = '/static/'
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
+    'django.core.context_processors.static',
+    'currencies.context_processors.currencies',
 )
 
 SHOP_PRODUCT_MODEL = (u'test_app.models.Product', 'shop')

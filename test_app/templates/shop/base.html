@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>django-shop</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.currency-switcher.js"></script>
+</head>
+<body>
+    {% include "shop/_currency_switcher.html" %}
+    {% block body %}{% endblock %}
+</body>
+</html>

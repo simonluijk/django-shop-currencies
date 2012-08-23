@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<form id="currency_switcher" action="{% url change_currency %}" method="POST" class="form-inline form-narrow">
+    {% csrf_token %}
+    <select name="currency">
+        {% for item in currencies %}
+            <option value="{{ item.code }}"{% ifequal item.code currency %} selected="selected"{% endifequal %}>{{ item.code }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" class="btn" value="{% trans "Choose" %}">
+</form>
