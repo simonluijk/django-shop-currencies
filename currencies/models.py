@@ -1,11 +1,7 @@
 # -*- coding:utf-8 -*-
 from decimal import Decimal
 from django.db import models
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-from django.core.exceptions import ImproperlyConfigured
-from polymorphic.polymorphic_model import PolymorphicModel
 from shop.models_bases import BaseCartItem, BaseOrder
 from shop.models_bases.managers import OrderManager
 
@@ -17,18 +13,18 @@ class Currency(models.Model):
 
     code = models.CharField(_(u'Code'), unique=True, max_length=3)
     rate = models.DecimalField(_(u'Rate'), max_digits=12, decimal_places=4,
-        default=Decimal('1'))
+                               default=Decimal('1'))
     spread = models.DecimalField(_(u'Spread'), max_digits=12, decimal_places=4,
-        default=Decimal('2.5'))
+                                 default=Decimal('2.5'))
     before = models.CharField(_(u'Before chars'), max_length=30, blank=True,
-        default='')
+                              default='')
     after = models.CharField(_(u'After chars'), max_length=30, blank=True,
-        default='')
+                             default='')
     decimal_places = models.IntegerField(_(u'Decimal places'), default=2)
     separator = models.CharField(_(u'Thousand seperator'), max_length=1,
-        default=u',')
+                                 default=u',')
     decimal_point = models.CharField(_(u'Decimal point'), max_length=1,
-        default=u'.')
+                                     default=u'.')
 
     class Meta:
         verbose_name = _(u'Currency')

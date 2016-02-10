@@ -44,6 +44,10 @@ def price_convert(context, price, currency=None):
     Template tag that takes a object and returns its price formatted in a
     currency. If currency is not passed it is taken from the request.
     """
+
+    if price == '':
+        return ''
+
     if currency is None:
         try:
             currency = get_currency(context['request'])
